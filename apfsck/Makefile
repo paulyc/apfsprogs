@@ -6,8 +6,9 @@ DEPS = $(SRCS:.c=.d)
 LIBDIR = ../lib
 LIBRARY = $(LIBDIR)/libapfs.a
 
-BINDIR = ~/bin
-MANDIR = ~/share/man/man8
+PREFIX ?= /usr/local
+BINDIR ?= $(PREFIX)/bin
+MANDIR ?= $(PREFIX)/share/man/man8
 
 SPARSE_VERSION := $(shell sparse --version 2>/dev/null)
 
@@ -34,8 +35,6 @@ endif
 
 -include $(DEPS)
 
-clean:
-	rm -f $(OBJS) $(DEPS) apfsck
 install:
 	install -d $(BINDIR)
 	install -t $(BINDIR) apfsck
@@ -43,3 +42,9 @@ install:
 	install -d $(MANDIR)
 	install -m 644 -t $(MANDIR) apfsck.8
 	ln -fs -T $(MANDIR)/apfsck.8 $(MANDIR)/fsck.apfs.8
+
+uninstall: FORCE
+	rm -f $(BINDIR)/apfsck $(BINDIR)/fsck.apfs $(MANDIR)/apfsck.8 $(MANDIR)/fsck.apfs.8
+
+clean: FORCE
+	rm -f $(OBJS) $(DEPS) apfsck

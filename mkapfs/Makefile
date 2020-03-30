@@ -5,8 +5,9 @@ DEPS = $(SRCS:.c=.d)
 LIBDIR = ../lib
 LIBRARY = $(LIBDIR)/libapfs.a
 
-BINDIR = ~/bin
-MANDIR = ~/share/man/man8
+PREFIX ?= /usr/local
+BINDIR ?= $(PREFIX)/bin
+MANDIR ?= $(PREFIX)/share/man/man8
 
 SPARSE_VERSION := $(shell sparse --version 2>/dev/null)
 
@@ -42,3 +43,6 @@ install:
 	install -d $(MANDIR)
 	install -m 644 -t $(MANDIR) mkapfs.8
 	ln -fs -T $(MANDIR)/mkapfs.8 $(MANDIR)/mkfs.apfs.8
+
+uninstall: FORCE
+	rm -f $(BINDIR)/mkapfs $(BINDIR)/mkfs.apfs $(MANDIR)/mkapfs.8 $(MANDIR)/mkfs.apfs.8
